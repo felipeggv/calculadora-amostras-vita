@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Simulador editável da economia de um kit de amostras e sua conversão em compras.">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Calculadora de amostras · VitaScience</title>
+  <style>
+    :root { color-scheme: light; font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #18323b; background: #f3f7f5; line-height: 1.5; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .shell { width: min(1280px, calc(100% - 36px)); margin: 0 auto; }
+    .hero { background: #123c43; color: #f7fdfb; padding: 38px 0 42px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; color: #a6e2c8; font-size: .76rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: #71dcab; }
+    h1 { margin: 12px 0 10px; max-width: 780px; font-size: clamp(2rem, 4vw, 3.35rem); line-height: 1.08; letter-spacing: -.045em; }
+    .hero p { margin: 0; max-width: 690px; color: #c9dfd9; font-size: 1.05rem; }
+    .hero-note { margin-top: 23px; display: inline-block; padding: 8px 12px; border: 1px solid #66948b; border-radius: 8px; color: #dcefe8; font-size: .8rem; }
+    main { padding: 30px 0 60px; }
+    .section-title { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 15px; }
+    h2 { margin: 0; font-size: 1.25rem; letter-spacing: -.025em; }
+    h3 { margin: 0 0 5px; font-size: 1rem; }
+    .muted { color: #5b7179; font-size: .88rem; }
+    .section-title p, .panel > p { margin: 3px 0 0; }
+    .preset-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .preset-row button, .reset { border: 1px solid #b9d3ca; border-radius: 999px; padding: 8px 14px; background: #fff; color: #235459; font-weight: 700; font-size: .83rem; }
+    .preset-row button:hover, .reset:hover { border-color: #247f70; }
+    .preset-row button[aria-pressed="true"] { background: #d4f1e4; border-color: #3e9f7e; color: #164f48; }
+    .layout { display: grid; grid-template-columns: minmax(320px, .92fr) minmax(0, 1.55fr); gap: 20px; align-items: start; }
+    .panel { background: #fff; border: 1px solid #dbe7e2; box-shadow: 0 10px 32px rgba(14, 55, 54, .045); border-radius: 17px; padding: 23px; }
+    .input-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    fieldset { border: 0; padding: 0; margin: 22px 0 0; }
+    legend { width: 100%; margin-bottom: 12px; padding: 0 0 7px; border-bottom: 1px solid #e4eeea; color: #286758; font-size: .78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .input-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    label { display: block; font-size: .84rem; font-weight: 700; color: #27434a; }
+    label small { display: block; min-height: 2.4em; color: #72858a; font-size: .72rem; font-weight: 500; line-height: 1.25; margin-top: 3px; }
+    .input-wrap { display: flex; align-items: center; margin-top: 7px; border: 1px solid #bfcfc9; border-radius: 9px; background: #fff; overflow: hidden; }
+    .input-wrap:focus-within { outline: 2px solid #5cba95; outline-offset: 2px; }
+    .input-wrap span { padding: 0 0 0 11px; color: #698178; font-weight: 600; }
+    .input-wrap input { width: 100%; min-width: 0; border: 0; outline: 0; padding: 10px 11px; color: #15343b; background: transparent; font-weight: 700; }
+    input:invalid { color: #aa3d37; }
+    .error { min-height: 1.3em; margin: 14px 0 0; color: #a43a35; font-size: .83rem; font-weight: 700; }
+    .kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
+    .kpi { min-height: 133px; border: 1px solid #dbe8e3; border-radius: 14px; background: #fff; padding: 17px; }
+    .kpi.accent { background: #e3f7ed; border-color: #b6e4cc; }
+    .kpi .label { color: #547079; font-size: .79rem; font-weight: 700; }
+    .kpi .value { display: block; margin: 10px 0 3px; font-size: clamp(1.5rem, 2.5vw, 2.15rem); font-weight: 800; letter-spacing: -.04em; line-height: 1.1; }
+    .kpi .detail { color: #62777d; font-size: .73rem; }
+    .negative { color: #b1473d !important; }
+    .positive { color: #14745f !important; }
+    .metric-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; margin: 16px 0 0; }
+    .metric-list div { display: flex; justify-content: space-between; gap: 14px; padding: 11px 0; border-bottom: 1px solid #e7eeeb; }
+    .metric-list dt { color: #5f747b; font-size: .82rem; }
+    .metric-list dd { margin: 0; text-align: right; font-size: .88rem; font-weight: 800; white-space: nowrap; }
+    .callout { margin: 17px 0 0; padding: 12px 14px; border-left: 3px solid #2b987a; border-radius: 6px; background: #f0f8f4; color: #3b6860; font-size: .81rem; }
+    .scenario { margin-top: 22px; }
+    .table-wrap { overflow-x: auto; margin-top: 17px; }
+    table { width: 100%; border-collapse: collapse; font-size: .84rem; font-variant-numeric: tabular-nums; }
+    caption { text-align: left; margin-bottom: 10px; color: #62777d; font-size: .8rem; }
+    th, td { border-bottom: 1px solid #e5eeea; padding: 11px 9px; text-align: right; white-space: nowrap; }
+    th:first-child, td:first-child { text-align: left; }
+    th { color: #55716d; background: #f5faf7; font-weight: 800; }
+    td.good { color: #14745f; font-weight: 800; }
+    td.bad { color: #a65245; font-weight: 800; }
+    details { margin-top: 16px; }
+    summary { cursor: pointer; color: #286758; font-size: .85rem; font-weight: 800; }
+    .axis-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+    .axis-grid label small { min-height: 0; }
+    .axis-grid input { width: 100%; margin-top: 5px; border: 1px solid #bfcfc9; border-radius: 8px; padding: 8px; color: #15343b; }
+    .explain { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 20px; }
+    .explain p { margin: 0; }
+    footer { padding: 22px 0 35px; border-top: 1px solid #dce7e2; color: #6c817d; font-size: .76rem; }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .explain { grid-template-columns: 1fr; } }
+    @media (max-width: 550px) { .shell { width: min(100% - 24px, 1280px); } .hero { padding: 30px 0; } .panel { padding: 17px; } .input-grid, .metric-list, .axis-grid { grid-template-columns: 1fr 1fr; } .kpi { min-height: 128px; padding: 14px; } .kpi .value { font-size: 1.45rem; } }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="shell">
+      <div class="eyebrow">VitaScience · Planejamento comercial</div>
+      <h1>Quanto custa conquistar um cliente com amostras?</h1>
+      <p>Altere as premissas e veja o resultado do kit, o custo por comprador incremental e o efeito na campanha inteira.</p>
+      <div class="hero-note">Simulação local no navegador · dados digitados não são enviados</div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <div class="section-title"><div><h2>Escolha um ponto de partida</h2><p class="muted">Os botões mudam preço, anúncio e recompra; os demais campos permanecem editáveis.</p></div></div>
+    <div class="preset-row" role="group" aria-label="Cenários prontos">
+      <button type="button" data-preset data-price="24.9" data-ads="6" data-repeat="5" aria-pressed="true">Base · R$ 24,90 · 5%</button>
+      <button type="button" data-preset data-price="19.9" data-ads="7" data-repeat="3" aria-pressed="false">Conservador · R$ 19,90 · 3%</button>
+      <button type="button" data-preset data-price="24.9" data-ads="5" data-repeat="10" aria-pressed="false">Otimista · R$ 24,90 · 10%</button>
+      <button type="button" data-preset data-price="24.9" data-ads="6" data-repeat="15" aria-pressed="false">Pré-Black Friday · 15%</button>
+    </div>
+
+    <div class="layout">
+      <section class="panel" aria-labelledby="inputs-heading">
+        <div class="input-header"><div><h2 id="inputs-heading">Premissas</h2><p class="muted">Tudo pode ser alterado.</p></div><button class="reset" id="reset" type="button">Restaurar</button></div>
+        <fieldset><legend>Kit de amostras</legend><div class="input-grid">
+          <label>Preço do kit <small>Benchmark: R$ 19,90 ou R$ 24,90</small><div class="input-wrap"><span>R$</span><input data-field="price" type="number" min="0" step="any" value="24.90"></div></label>
+          <label>Taxas + impostos <small>Percentual sobre a venda do kit</small><div class="input-wrap"><input data-field="feeRate" type="number" min="0" max="100" step="any" value="25"><span>%&nbsp;&nbsp;</span></div></label>
+          <label>Produto + operação <small>Custo total do kit; confirmar valor real</small><div class="input-wrap"><span>R$</span><input data-field="kitCost" type="number" min="0" step="any" value="11.50"></div></label>
+          <label>Frete por kit <small>Custo suportado pela operação</small><div class="input-wrap"><span>R$</span><input data-field="freight" type="number" min="0" step="any" value="4.50"></div></label>
+          <label>Anúncio por kit vendido <small>CPSV; benchmark de terceiros não validado</small><div class="input-wrap"><span>R$</span><input data-field="ads" type="number" min="0" step="any" value="6"></div></label>
+          <label>Kits vendidos <small>Volume hipotético da campanha</small><div class="input-wrap"><input data-field="volume" type="number" min="0" step="1" value="1000"></div></label>
+        </div></fieldset>
+        <fieldset><legend>Compra seguinte</legend><div class="input-grid">
+          <label>Taxa de recompra <small>Da amostra para o produto principal</small><div class="input-wrap"><input data-field="repeatRate" type="number" min="0" max="100" step="any" value="5"><span>%&nbsp;&nbsp;</span></div></label>
+          <label>Compradores incrementais <small>Parte das recompras realmente nova</small><div class="input-wrap"><input data-field="incrementality" type="number" min="0" max="100" step="any" value="100"><span>%&nbsp;&nbsp;</span></div></label>
+          <label>Margem da compra seguinte <small>R$ 100 é exemplo; inserir margem real</small><div class="input-wrap"><span>R$</span><input data-field="margin" type="number" min="0" step="any" value="100"></div></label>
+          <label>CAC direto de referência <small>R$ 110 é exemplo, não dado confirmado</small><div class="input-wrap"><span>R$</span><input data-field="directCAC" type="number" min="0" step="any" value="110"></div></label>
+        </div></fieldset>
+        <p id="error" class="error" role="alert"></p>
+      </section>
+
+      <div>
+        <section aria-labelledby="result-heading"><div class="section-title"><div><h2 id="result-heading">Resultado do cenário</h2><p class="muted">Projeção de uma compra seguinte por comprador incremental.</p></div></div>
+          <div class="kpis">
+            <div class="kpi"><div class="label">Resultado por kit vendido</div><strong class="value" id="kit-contribution">—</strong><div class="detail">Após taxas, produto, frete e anúncio</div></div>
+            <div class="kpi"><div class="label">Custo por comprador incremental</div><strong class="value" id="effective-cost">—</strong><div class="detail">Subsídio líquido dividido pelos novos compradores</div></div>
+            <div class="kpi"><div class="label">Novos compradores esperados</div><strong class="value" id="new-buyers">—</strong><div class="detail">Volume × recompra × incrementalidade</div></div>
+            <div class="kpi accent"><div class="label">Resultado total da campanha</div><strong class="value" id="net-total">—</strong><div class="detail">Kit + margem da compra seguinte</div></div>
+          </div>
+        </section>
+        <section class="panel" aria-labelledby="breakdown-heading"><h2 id="breakdown-heading">Como o resultado se forma</h2>
+          <dl class="metric-list">
+            <div><dt>Receita líquida por kit</dt><dd id="net-revenue">—</dd></div>
+            <div><dt>Resultado de todos os kits</dt><dd id="kit-total">—</dd></div>
+            <div><dt>Margem das compras seguintes</dt><dd id="repeat-total">—</dd></div>
+            <div><dt>Recompra mínima para zerar</dt><dd id="break-even">—</dd></div>
+            <div><dt>Recompra mínima para igualar CAC direto</dt><dd id="parity">—</dd></div>
+            <div><dt>Diferença estimada vs CAC direto</dt><dd id="advantage">—</dd></div>
+          </dl>
+          <p class="callout">O “custo por comprador incremental” mede o subsídio da amostra dividido pelos novos compradores. Não é o CAC completo da empresa. Uma taxa acima de 100% indica que a meta não é atingível neste modelo.</p>
+        </section>
+      </div>
+    </div>
+
+    <section class="panel scenario" aria-labelledby="matrix-heading">
+      <div class="section-title"><div><h2 id="matrix-heading">Matriz de cenários</h2><p class="muted">Compare preço, anúncio e recompra com os mesmos custos, taxas e incrementalidade acima.</p></div></div>
+      <div class="table-wrap"><table><caption>Custo líquido por novo comprador, em R$. Verde = abaixo ou igual ao CAC direto informado.</caption><thead id="matrix-head"></thead><tbody id="matrix-body"></tbody></table></div>
+      <details><summary>Alterar faixas da matriz</summary><div class="axis-grid">
+        <label>Preço 1<input data-axis="price" type="number" min="0" step="any" value="19.90"></label>
+        <label>Preço 2<input data-axis="price" type="number" min="0" step="any" value="24.90"></label>
+        <label>Anúncio 1<input data-axis="ads" type="number" min="0" step="any" value="5"></label>
+        <label>Anúncio 2<input data-axis="ads" type="number" min="0" step="any" value="6"></label>
+        <label>Anúncio 3<input data-axis="ads" type="number" min="0" step="any" value="7"></label>
+        <label>Recompra 1 (%)<input data-axis="repeatRate" type="number" min="0" max="100" step="any" value="3"></label>
+        <label>Recompra 2 (%)<input data-axis="repeatRate" type="number" min="0" max="100" step="any" value="5"></label>
+        <label>Recompra 3 (%)<input data-axis="repeatRate" type="number" min="0" max="100" step="any" value="10"></label>
+        <label>Recompra 4 (%)<input data-axis="repeatRate" type="number" min="0" max="100" step="any" value="15"></label>
+      </div></details>
+    </section>
+
+    <section class="explain" aria-label="Interpretação do modelo">
+      <div class="panel"><h3>1. Kit</h3><p class="muted">Preço menos taxas, produto, frete e anúncio. Um valor negativo é o investimento feito em cada amostra.</p></div>
+      <div class="panel"><h3>2. Recompra incremental</h3><p class="muted">Nem toda recompra representa cliente novo. Ajuste esse percentual para evitar superestimar o retorno.</p></div>
+      <div class="panel"><h3>3. Decisão</h3><p class="muted">Compare o custo por novo comprador com o CAC direto e valide a margem real. Mudanças de demanda causadas pelo preço não são previstas.</p></div>
+    </section>
+  </main>
+  <footer><div class="shell">VitaScience · Simulação para planejamento. Benchmarks iniciais são hipóteses da análise de amostras, não resultados medidos da empresa.</div></footer>
+
+  <script type="module">
+    import { calculate } from './model.mjs';
+
+    const money = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+    const count = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 });
+    const percent = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 });
+    const fields = [...document.querySelectorAll('[data-field]')];
+    const axes = [...document.querySelectorAll('[data-axis]')];
+    const presets = [...document.querySelectorAll('[data-preset]')];
+    const byId = (id) => document.getElementById(id);
+    const showMoney = (id, value) => { byId(id).textContent = value === null ? '—' : money.format(value); };
+    const showPercent = (id, value) => { byId(id).textContent = value === null ? '—' : `${percent.format(value)}%`; };
+    function invalidate(message) {
+      byId('error').textContent = message;
+      for (const id of ['kit-contribution', 'effective-cost', 'new-buyers', 'net-total', 'net-revenue', 'kit-total', 'repeat-total', 'break-even', 'parity', 'advantage']) byId(id).textContent = '—';
+      byId('matrix-body').replaceChildren();
+    }
+
+    function read(input) {
+      if (input.value.trim() === '' || !input.validity.valid || !Number.isFinite(Number(input.value))) return null;
+      return Number(input.value);
+    }
+
+    function render() {
+      const values = {};
+      for (const input of fields) {
+        values[input.dataset.field] = read(input);
+        if (values[input.dataset.field] === null) {
+          invalidate(`Confira o campo “${input.closest('label').firstChild.textContent.trim()}”.`);
+          return;
+        }
+      }
+      const axisValues = { price: [], ads: [], repeatRate: [] };
+      for (const input of axes) {
+        const value = read(input);
+        if (value === null) {
+          invalidate('Confira os valores nas faixas da matriz.');
+          return;
+        }
+        axisValues[input.dataset.axis].push(value);
+      }
+      byId('error').textContent = '';
+      const result = calculate(values);
+      for (const [id, value] of Object.entries({
+        'kit-contribution': result.kitContribution, 'effective-cost': result.effectiveCost,
+        'net-total': result.netTotal, 'net-revenue': result.netRevenue,
+        'kit-total': result.kitTotal, 'repeat-total': result.repeatTotal,
+        'advantage': result.directAdvantage,
+      })) showMoney(id, value);
+      byId('new-buyers').textContent = count.format(result.incrementalBuyers);
+      showPercent('break-even', result.breakEvenRate);
+      showPercent('parity', result.parityRate);
+      for (const [id, value] of Object.entries({ 'kit-contribution': result.kitContribution, 'net-total': result.netTotal, 'kit-total': result.kitTotal, 'repeat-total': result.repeatTotal, 'advantage': result.directAdvantage })) byId(id).classList.toggle('negative', value < 0);
+      byId('effective-cost').classList.toggle('positive', result.effectiveCost !== null && result.effectiveCost <= values.directCAC);
+
+      byId('matrix-head').innerHTML = `<tr><th scope="col">Preço / anúncio</th>${axisValues.repeatRate.map(rate => `<th scope="col">${percent.format(rate)}%</th>`).join('')}</tr>`;
+      byId('matrix-body').innerHTML = axisValues.price.flatMap(price => axisValues.ads.map(ads => {
+        const cells = axisValues.repeatRate.map(repeatRate => {
+          const cost = calculate({ ...values, price, ads, repeatRate }).effectiveCost;
+          const tone = cost === null ? '' : cost <= values.directCAC ? 'good' : 'bad';
+          return `<td class="${tone}">${cost === null ? '—' : money.format(cost)}</td>`;
+        }).join('');
+        return `<tr><th scope="row">${money.format(price)} / ${money.format(ads)}</th>${cells}</tr>`;
+      })).join('');
+    }
+
+    for (const input of [...fields, ...axes]) input.addEventListener('input', () => {
+      for (const button of presets) button.setAttribute('aria-pressed', 'false');
+      render();
+    });
+    for (const button of presets) button.addEventListener('click', () => {
+      for (const name of ['price', 'ads', 'repeatRate']) fields.find(input => input.dataset.field === name).value = button.dataset[name === 'repeatRate' ? 'repeat' : name];
+      for (const item of presets) item.setAttribute('aria-pressed', String(item === button));
+      render();
+    });
+    byId('reset').addEventListener('click', () => {
+      for (const input of [...fields, ...axes]) input.value = input.defaultValue;
+      for (const button of presets) button.setAttribute('aria-pressed', String(button === presets[0]));
+      render();
+    });
+    render();
+  </script>
+</body>
+</html>
