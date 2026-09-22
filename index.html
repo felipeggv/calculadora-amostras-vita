@@ -29,11 +29,22 @@
     .preset-row button, .reset { border: 1px solid #b9d3ca; border-radius: 999px; padding: 8px 14px; background: #fff; color: #235459; font-weight: 700; font-size: .83rem; }
     .preset-row button:hover, .reset:hover { border-color: #247f70; }
     .preset-row button[aria-pressed="true"] { background: #d4f1e4; border-color: #3e9f7e; color: #164f48; }
-    .layout { display: grid; grid-template-columns: minmax(320px, .92fr) minmax(0, 1.55fr); gap: 20px; align-items: start; }
     .panel { background: #fff; border: 1px solid #dbe7e2; box-shadow: 0 10px 32px rgba(14, 55, 54, .045); border-radius: 17px; padding: 23px; }
-    .input-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-    fieldset { border: 0; padding: 0; margin: 22px 0 0; }
-    legend { width: 100%; margin-bottom: 12px; padding: 0 0 7px; border-bottom: 1px solid #e4eeea; color: #286758; font-size: .78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .funnel { display: grid; gap: 0; }
+    .stage { padding: 27px; }
+    .stage-head { display: flex; align-items: center; gap: 17px; }
+    .stage-number { flex: 0 0 46px; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: #d9f3e7; color: #1c6e5b; font-size: .96rem; font-weight: 800; }
+    .stage-head h2 { font-size: 1.35rem; }
+    .stage-head p { margin: 3px 0 0; }
+    .stage-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, .82fr); gap: 28px; margin-top: 21px; padding-top: 20px; border-top: 1px solid #e2ece7; align-items: start; }
+    .stage-inputs h3, .stage-output h3 { margin-bottom: 14px; color: #286758; font-size: .76rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .stage-output { border: 1px solid #cde9da; border-radius: 13px; background: #f0faf4; padding: 18px; }
+    .stage-output.final { background: #e5f7ee; border-color: #a8ddc1; }
+    .spotlight-label { display: block; color: #506e68; font-size: .84rem; font-weight: 700; }
+    .spotlight-value { display: block; margin: 5px 0 3px; color: #173f3e; font-size: clamp(1.7rem, 3vw, 2.4rem); line-height: 1.15; letter-spacing: -.04em; }
+    .spotlight-detail { display: block; color: #688078; font-size: .75rem; }
+    .flow-connector { height: 54px; display: grid; place-items: center; color: #218263; font-size: 1.3rem; }
+    .flow-connector span { display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid #abdcc4; border-radius: 50%; background: #e6f7ed; }
     .input-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
     label { display: block; font-size: .84rem; font-weight: 700; color: #27434a; }
     label small { display: block; min-height: 2.4em; color: #72858a; font-size: .72rem; font-weight: 500; line-height: 1.25; margin-top: 3px; }
@@ -43,20 +54,14 @@
     .input-wrap input { width: 100%; min-width: 0; border: 0; outline: 0; padding: 10px 11px; color: #15343b; background: transparent; font-weight: 700; }
     input:invalid { color: #aa3d37; }
     .error { min-height: 1.3em; margin: 14px 0 0; color: #a43a35; font-size: .83rem; font-weight: 700; }
-    .kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
-    .kpi { min-height: 133px; border: 1px solid #dbe8e3; border-radius: 14px; background: #fff; padding: 17px; }
-    .kpi.accent { background: #e3f7ed; border-color: #b6e4cc; }
-    .kpi .label { color: #547079; font-size: .79rem; font-weight: 700; }
-    .kpi .value { display: block; margin: 10px 0 3px; font-size: clamp(1.5rem, 2.5vw, 2.15rem); font-weight: 800; letter-spacing: -.04em; line-height: 1.1; }
-    .kpi .detail { color: #62777d; font-size: .73rem; }
     .negative { color: #b1473d !important; }
     .positive { color: #14745f !important; }
-    .metric-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; margin: 16px 0 0; }
+    .metric-list { display: grid; grid-template-columns: 1fr; margin: 14px 0 0; }
     .metric-list div { display: flex; justify-content: space-between; gap: 14px; padding: 11px 0; border-bottom: 1px solid #e7eeeb; }
     .metric-list dt { color: #5f747b; font-size: .82rem; }
     .metric-list dd { margin: 0; text-align: right; font-size: .88rem; font-weight: 800; white-space: nowrap; }
     .callout { margin: 17px 0 0; padding: 12px 14px; border-left: 3px solid #2b987a; border-radius: 6px; background: #f0f8f4; color: #3b6860; font-size: .81rem; }
-    .scenario { margin-top: 22px; }
+    .scenario { margin-top: 0; }
     .table-wrap { overflow-x: auto; margin-top: 17px; }
     table { width: 100%; border-collapse: collapse; font-size: .84rem; font-variant-numeric: tabular-nums; }
     caption { text-align: left; margin-bottom: 10px; color: #62777d; font-size: .8rem; }
@@ -70,11 +75,9 @@
     .axis-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
     .axis-grid label small { min-height: 0; }
     .axis-grid input { width: 100%; margin-top: 5px; border: 1px solid #bfcfc9; border-radius: 8px; padding: 8px; color: #15343b; }
-    .explain { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 20px; }
-    .explain p { margin: 0; }
     footer { padding: 22px 0 35px; border-top: 1px solid #dce7e2; color: #6c817d; font-size: .76rem; }
-    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .explain { grid-template-columns: 1fr; } }
-    @media (max-width: 550px) { .shell { width: min(100% - 24px, 1280px); } .hero { padding: 30px 0; } .panel { padding: 17px; } .input-grid, .metric-list, .axis-grid { grid-template-columns: 1fr 1fr; } .kpi { min-height: 128px; padding: 14px; } .kpi .value { font-size: 1.45rem; } }
+    @media (max-width: 900px) { .stage-body { grid-template-columns: 1fr; } }
+    @media (max-width: 550px) { .shell { width: min(100% - 24px, 1280px); } .hero { padding: 30px 0; } .panel, .stage { padding: 17px; } .stage-head { align-items: start; } .stage-number { flex-basis: 38px; width: 38px; height: 38px; } .input-grid, .axis-grid { grid-template-columns: 1fr 1fr; } .spotlight-value { font-size: 1.8rem; } }
   </style>
 </head>
 <body>
@@ -88,7 +91,7 @@
   </header>
 
   <main class="shell">
-    <div class="section-title"><div><h2>Escolha um ponto de partida</h2><p class="muted">Os botões mudam preço, anúncio e recompra; os demais campos permanecem editáveis.</p></div></div>
+    <div class="section-title"><div><h2>Escolha um ponto de partida</h2><p class="muted">Depois, percorra o funil de cima para baixo. Todos os valores continuam editáveis.</p></div><button class="reset" id="reset" type="button">Restaurar</button></div>
     <div class="preset-row" role="group" aria-label="Cenários prontos">
       <button type="button" data-preset data-price="24.9" data-ads="6" data-repeat="5" aria-pressed="true">Base · R$ 24,90 · 5%</button>
       <button type="button" data-preset data-price="19.9" data-ads="7" data-repeat="3" aria-pressed="false">Conservador · R$ 19,90 · 3%</button>
@@ -96,51 +99,56 @@
       <button type="button" data-preset data-price="24.9" data-ads="6" data-repeat="15" aria-pressed="false">Pré-Black Friday · 15%</button>
     </div>
 
-    <div class="layout">
-      <section class="panel" aria-labelledby="inputs-heading">
-        <div class="input-header"><div><h2 id="inputs-heading">Premissas</h2><p class="muted">Tudo pode ser alterado.</p></div><button class="reset" id="reset" type="button">Restaurar</button></div>
-        <fieldset><legend>Kit de amostras</legend><div class="input-grid">
+    <p id="error" class="error" role="alert"></p>
+    <div class="funnel">
+      <section class="panel stage" aria-labelledby="stage-1-heading">
+        <div class="stage-head"><span class="stage-number">01</span><div><h2 id="stage-1-heading">Venda do kit de amostras</h2><p class="muted">Defina quantos kits serão vendidos e quanto custa gerar cada venda.</p></div></div>
+        <div class="stage-body"><div class="stage-inputs"><h3>Você informa</h3><div class="input-grid">
           <label>Preço do kit <small>Benchmark: R$ 19,90 ou R$ 24,90</small><div class="input-wrap"><span>R$</span><input data-field="price" type="number" min="0" step="any" value="24.90"></div></label>
+          <label>Kits vendidos <small>Volume hipotético da campanha</small><div class="input-wrap"><input data-field="volume" type="number" min="0" step="1" value="1000"></div></label>
+          <label>Anúncio por kit vendido <small>CPSV: custo de publicidade por venda</small><div class="input-wrap"><span>R$</span><input data-field="ads" type="number" min="0" step="any" value="6"></div></label>
+        </div></div><div class="stage-output"><h3>O funil entrega</h3><span class="spotlight-label">Faturamento bruto dos kits</span><strong class="spotlight-value" id="gross-total">—</strong><span class="spotlight-detail">Preço × kits vendidos</span>
+          <dl class="metric-list"><div><dt>Kits vendidos</dt><dd id="kits-count">—</dd></div><div><dt>Investimento em anúncios</dt><dd id="ads-total">—</dd></div></dl>
+        </div></div>
+      </section>
+      <div class="flow-connector" aria-hidden="true"><span>↓</span></div>
+
+      <section class="panel stage" aria-labelledby="stage-2-heading">
+        <div class="stage-head"><span class="stage-number">02</span><div><h2 id="stage-2-heading">Economia de cada kit</h2><p class="muted">Desconte taxas, produto, operação, frete e a publicidade da etapa anterior.</p></div></div>
+        <div class="stage-body"><div class="stage-inputs"><h3>Você informa</h3><div class="input-grid">
           <label>Taxas + impostos <small>Percentual sobre a venda do kit</small><div class="input-wrap"><input data-field="feeRate" type="number" min="0" max="100" step="any" value="25"><span>%&nbsp;&nbsp;</span></div></label>
           <label>Produto + operação <small>Custo total do kit; confirmar valor real</small><div class="input-wrap"><span>R$</span><input data-field="kitCost" type="number" min="0" step="any" value="11.50"></div></label>
           <label>Frete por kit <small>Custo suportado pela operação</small><div class="input-wrap"><span>R$</span><input data-field="freight" type="number" min="0" step="any" value="4.50"></div></label>
-          <label>Anúncio por kit vendido <small>CPSV; benchmark de terceiros não validado</small><div class="input-wrap"><span>R$</span><input data-field="ads" type="number" min="0" step="any" value="6"></div></label>
-          <label>Kits vendidos <small>Volume hipotético da campanha</small><div class="input-wrap"><input data-field="volume" type="number" min="0" step="1" value="1000"></div></label>
-        </div></fieldset>
-        <fieldset><legend>Compra seguinte</legend><div class="input-grid">
+        </div></div><div class="stage-output"><h3>O funil entrega</h3><span class="spotlight-label">Resultado por kit vendido</span><strong class="spotlight-value" id="kit-contribution">—</strong><span class="spotlight-detail">Negativo = investimento para colocar a amostra na mão do cliente</span>
+          <dl class="metric-list"><div><dt>Receita líquida por kit</dt><dd id="net-revenue">—</dd></div><div><dt>Resultado de todos os kits</dt><dd id="kit-total">—</dd></div></dl>
+        </div></div>
+      </section>
+      <div class="flow-connector" aria-hidden="true"><span>↓</span></div>
+
+      <section class="panel stage" aria-labelledby="stage-3-heading">
+        <div class="stage-head"><span class="stage-number">03</span><div><h2 id="stage-3-heading">Conversão em novos compradores</h2><p class="muted">Estime quantos clientes compram o produto principal por causa da amostra.</p></div></div>
+        <div class="stage-body"><div class="stage-inputs"><h3>Você informa</h3><div class="input-grid">
           <label>Taxa de recompra <small>Da amostra para o produto principal</small><div class="input-wrap"><input data-field="repeatRate" type="number" min="0" max="100" step="any" value="5"><span>%&nbsp;&nbsp;</span></div></label>
           <label>Compradores incrementais <small>Parte das recompras realmente nova</small><div class="input-wrap"><input data-field="incrementality" type="number" min="0" max="100" step="any" value="100"><span>%&nbsp;&nbsp;</span></div></label>
-          <label>Margem da compra seguinte <small>R$ 100 é exemplo; inserir margem real</small><div class="input-wrap"><span>R$</span><input data-field="margin" type="number" min="0" step="any" value="100"></div></label>
-          <label>CAC direto de referência <small>R$ 110 é exemplo, não dado confirmado</small><div class="input-wrap"><span>R$</span><input data-field="directCAC" type="number" min="0" step="any" value="110"></div></label>
-        </div></fieldset>
-        <p id="error" class="error" role="alert"></p>
+        </div></div><div class="stage-output"><h3>O funil entrega</h3><span class="spotlight-label">Novos compradores esperados</span><strong class="spotlight-value" id="new-buyers">—</strong><span class="spotlight-detail">Kits × recompra × incrementalidade</span>
+          <dl class="metric-list"><div><dt>Custo por comprador incremental</dt><dd id="effective-cost">—</dd></div></dl>
+        </div></div>
       </section>
+      <div class="flow-connector" aria-hidden="true"><span>↓</span></div>
 
-      <div>
-        <section aria-labelledby="result-heading"><div class="section-title"><div><h2 id="result-heading">Resultado do cenário</h2><p class="muted">Projeção de uma compra seguinte por comprador incremental.</p></div></div>
-          <div class="kpis">
-            <div class="kpi"><div class="label">Resultado por kit vendido</div><strong class="value" id="kit-contribution">—</strong><div class="detail">Após taxas, produto, frete e anúncio</div></div>
-            <div class="kpi"><div class="label">Custo por comprador incremental</div><strong class="value" id="effective-cost">—</strong><div class="detail">Subsídio líquido dividido pelos novos compradores</div></div>
-            <div class="kpi"><div class="label">Novos compradores esperados</div><strong class="value" id="new-buyers">—</strong><div class="detail">Volume × recompra × incrementalidade</div></div>
-            <div class="kpi accent"><div class="label">Resultado total da campanha</div><strong class="value" id="net-total">—</strong><div class="detail">Kit + margem da compra seguinte</div></div>
-          </div>
-        </section>
-        <section class="panel" aria-labelledby="breakdown-heading"><h2 id="breakdown-heading">Como o resultado se forma</h2>
-          <dl class="metric-list">
-            <div><dt>Receita líquida por kit</dt><dd id="net-revenue">—</dd></div>
-            <div><dt>Resultado de todos os kits</dt><dd id="kit-total">—</dd></div>
-            <div><dt>Margem das compras seguintes</dt><dd id="repeat-total">—</dd></div>
-            <div><dt>Recompra mínima para zerar</dt><dd id="break-even">—</dd></div>
-            <div><dt>Recompra mínima para igualar CAC direto</dt><dd id="parity">—</dd></div>
-            <div><dt>Diferença estimada vs CAC direto</dt><dd id="advantage">—</dd></div>
-          </dl>
-          <p class="callout">O “custo por comprador incremental” mede o subsídio da amostra dividido pelos novos compradores. Não é o CAC completo da empresa. Uma taxa acima de 100% indica que a meta não é atingível neste modelo.</p>
-        </section>
-      </div>
-    </div>
+      <section class="panel stage" aria-labelledby="stage-4-heading">
+        <div class="stage-head"><span class="stage-number">04</span><div><h2 id="stage-4-heading">Resultado da campanha</h2><p class="muted">Some a margem da compra seguinte e compare com a aquisição direta.</p></div></div>
+        <div class="stage-body"><div class="stage-inputs"><h3>Você informa</h3><div class="input-grid">
+          <label>Margem da compra seguinte <small>R$ 100 é exemplo; inserir margem real</small><div class="input-wrap"><span>R$</span><input data-field="margin" type="number" min="0" step="any" value="100"></div></label>
+          <label>Custo de aquisição direto (CAC) <small>R$ 110 é exemplo, não dado confirmado</small><div class="input-wrap"><span>R$</span><input data-field="directCAC" type="number" min="0" step="any" value="110"></div></label>
+        </div><p class="callout">O custo da etapa 03 é o subsídio da amostra dividido pelos novos compradores. Não é o CAC completo da empresa.</p></div><div class="stage-output final"><h3>O funil entrega</h3><span class="spotlight-label">Resultado total da campanha</span><strong class="spotlight-value" id="net-total">—</strong><span class="spotlight-detail">Resultado dos kits + margem da compra seguinte</span>
+          <dl class="metric-list"><div><dt>Margem das compras seguintes</dt><dd id="repeat-total">—</dd></div><div><dt>Recompra mínima para zerar</dt><dd id="break-even">—</dd></div><div><dt>Recompra para igualar CAC direto</dt><dd id="parity">—</dd></div><div><dt>Diferença estimada vs CAC direto</dt><dd id="advantage">—</dd></div></dl>
+        </div></div>
+      </section>
+      <div class="flow-connector" aria-hidden="true"><span>↓</span></div>
 
-    <section class="panel scenario" aria-labelledby="matrix-heading">
-      <div class="section-title"><div><h2 id="matrix-heading">Matriz de cenários</h2><p class="muted">Compare preço, anúncio e recompra com os mesmos custos, taxas e incrementalidade acima.</p></div></div>
+      <section class="panel scenario" aria-labelledby="matrix-heading">
+      <div class="stage-head"><span class="stage-number">05</span><div><h2 id="matrix-heading">Compare outros cenários</h2><p class="muted">Varie preço, anúncio e recompra; os demais custos seguem os valores preenchidos acima.</p></div></div>
       <div class="table-wrap"><table><caption>Custo líquido por novo comprador, em R$. Verde = abaixo ou igual ao CAC direto informado.</caption><thead id="matrix-head"></thead><tbody id="matrix-body"></tbody></table></div>
       <details><summary>Alterar faixas da matriz</summary><div class="axis-grid">
         <label>Preço 1<input data-axis="price" type="number" min="0" step="any" value="19.90"></label>
@@ -153,13 +161,9 @@
         <label>Recompra 3 (%)<input data-axis="repeatRate" type="number" min="0" max="100" step="any" value="10"></label>
         <label>Recompra 4 (%)<input data-axis="repeatRate" type="number" min="0" max="100" step="any" value="15"></label>
       </div></details>
-    </section>
-
-    <section class="explain" aria-label="Interpretação do modelo">
-      <div class="panel"><h3>1. Kit</h3><p class="muted">Preço menos taxas, produto, frete e anúncio. Um valor negativo é o investimento feito em cada amostra.</p></div>
-      <div class="panel"><h3>2. Recompra incremental</h3><p class="muted">Nem toda recompra representa cliente novo. Ajuste esse percentual para evitar superestimar o retorno.</p></div>
-      <div class="panel"><h3>3. Decisão</h3><p class="muted">Compare o custo por novo comprador com o CAC direto e valide a margem real. Mudanças de demanda causadas pelo preço não são previstas.</p></div>
-    </section>
+      <p class="callout">A comparação não prevê mudanças na demanda causadas pelo preço. Taxas de recompra necessárias acima de 100% não são atingíveis neste modelo.</p>
+      </section>
+    </div>
   </main>
   <footer><div class="shell">VitaScience · Simulação para planejamento. Benchmarks iniciais são hipóteses da análise de amostras, não resultados medidos da empresa.</div></footer>
 
@@ -177,7 +181,7 @@
     const showPercent = (id, value) => { byId(id).textContent = value === null ? '—' : `${percent.format(value)}%`; };
     function invalidate(message) {
       byId('error').textContent = message;
-      for (const id of ['kit-contribution', 'effective-cost', 'new-buyers', 'net-total', 'net-revenue', 'kit-total', 'repeat-total', 'break-even', 'parity', 'advantage']) byId(id).textContent = '—';
+      for (const id of ['gross-total', 'kits-count', 'ads-total', 'kit-contribution', 'effective-cost', 'new-buyers', 'net-total', 'net-revenue', 'kit-total', 'repeat-total', 'break-even', 'parity', 'advantage']) byId(id).textContent = '—';
       byId('matrix-body').replaceChildren();
     }
 
@@ -207,11 +211,13 @@
       byId('error').textContent = '';
       const result = calculate(values);
       for (const [id, value] of Object.entries({
+        'gross-total': result.grossTotal, 'ads-total': result.adsTotal,
         'kit-contribution': result.kitContribution, 'effective-cost': result.effectiveCost,
         'net-total': result.netTotal, 'net-revenue': result.netRevenue,
         'kit-total': result.kitTotal, 'repeat-total': result.repeatTotal,
         'advantage': result.directAdvantage,
       })) showMoney(id, value);
+      byId('kits-count').textContent = count.format(values.volume);
       byId('new-buyers').textContent = count.format(result.incrementalBuyers);
       showPercent('break-even', result.breakEvenRate);
       showPercent('parity', result.parityRate);

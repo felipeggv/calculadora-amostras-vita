@@ -13,6 +13,8 @@ export function calculate({ volume, price, feeRate, kitCost, freight, ads, repea
     ? (-kitContribution / (directCAC * incrementality / 100)) * 100 : null;
 
   return {
+    grossTotal: volume * price,
+    adsTotal: volume * ads,
     netRevenue,
     kitContribution,
     incrementalBuyers,

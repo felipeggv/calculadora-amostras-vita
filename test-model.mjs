@@ -8,6 +8,8 @@ const base = {
 const near = (actual, expected) => assert.ok(Math.abs(actual - expected) < 1e-9, `${actual} != ${expected}`);
 
 const result = calculate(base);
+near(result.grossTotal, 24900);
+near(result.adsTotal, 6000);
 near(result.kitContribution, -3.325);
 near(result.incrementalBuyers, 50);
 near(result.effectiveCost, 66.5);
